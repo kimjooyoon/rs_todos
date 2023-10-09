@@ -59,4 +59,24 @@ mod test {
         assert_eq!("이슈 만들기 content".to_string(), result.content);
         assert_eq!(1i32, result.order_number);
     }
+
+    #[test]
+    fn retrieve_todo_all<'a>() {
+        let mut mock = MockTodoRepository::new();
+        mock.expect_all()
+            .returning(|| vec![Todo {
+                id: 1i64,
+                title: "이슈 만들기 title".to_string(),
+                content: "이슈 만들기 content".to_string(),
+                order_number: 1i32,
+            }]).once();
+        let repository: Box<dyn TodoRepository + 'a> = Box::new(mock);
+
+        let result = TodoServiceAdapter::new(repository).retrieve_todo_all();
+
+        assert_eq!(1i64, result[0].id);
+        assert_eq!("이슈 만들기 title".to_string(), result[0].title);
+        assert_eq!("이슈 만들기 content".to_string(), result[0].content);
+        assert_eq!(1i32, result[0].order_number);
+    }
 }
