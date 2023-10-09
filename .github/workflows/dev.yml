@@ -18,12 +18,14 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Store diesel
+      id: diesel-cache
       uses: actions/cache@v3
       with:
         path: /home/runner/.cargo/bin/diesel
         key: ${{ runner.os }}-${{ hashFiles('**/diesel.toml') }}
 
     - name: Install Diesel
+      if: steps.diesel-cache.outputs.cache-hit != 'false'
       run: cargo install diesel_cli@2.1.1 --no-default-features --features postgres
 
     - name: set secret
