@@ -21,6 +21,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: /home/runner/.cargo/bin/diesel
+        key: ${{ runner.os }}-${{ hashFiles('**/diesel.toml') }}
 
     - name: Install Diesel
       run: cargo install diesel_cli@2.1.1 --no-default-features --features postgres
