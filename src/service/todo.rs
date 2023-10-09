@@ -79,4 +79,21 @@ mod test {
         assert_eq!("이슈 만들기 content".to_string(), result[0].content);
         assert_eq!(1i32, result[0].order_number);
     }
+
+    #[test]
+    fn save<'a>() {
+        let mut mock = MockTodoRepository::new();
+        mock.expect_save()
+            .returning(|_, _| 100_i64).once();
+        let repository: Box<dyn TodoRepository + 'a> = Box::new(mock);
+
+        let result = TodoServiceAdapter::new(repository).save(Todo {
+            id: 0,
+            title: "".to_string(),
+            content: "".to_string(),
+            order_number: 0,
+        });
+
+        assert_eq!(100_i64, result);
+    }
 }
