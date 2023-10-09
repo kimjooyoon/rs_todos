@@ -25,7 +25,7 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/diesel.toml') }}
 
     - name: Install Diesel
-      if: steps.diesel-cache.outputs.cache-hit != 'false'
+      if: steps.diesel-cache.outputs.cache-hit == 'false'
       run: cargo install diesel_cli@2.1.1 --no-default-features --features postgres
 
     - name: set secret
