@@ -1,0 +1,58 @@
+name: Rust Unit Test
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Store diesel
+      id: diesel-cache
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/.cargo/bin/diesel
+        key: ${{ runner.os }}-${{ hashFiles('**/diesel.toml') }}
+
+    - name: Install Diesel
+      if: steps.diesel-cache.outputs.cache-hit == 'false'
+      run: cargo install diesel_cli@2.1.1 --no-default-features --features postgres
+
+    - name: set secret
+      run: |
+        echo "$DOTENV" > .env
+      env:
+        DOTENV: ${{secrets.DOTENV}}
+
+    - uses: adambirds/docker-compose-action@v1.3.0
+      with:
+        compose-file: "./docs/postgres_local/docker-compose.yaml"
+
+    - name: Store migrate
+      uses: actions/cache@v3
+      with:
+        path: |
+          src/infrastructure/diesel/schema.rs
+          /home/runner/work/rs_todos/rs_todos/target/debug/deps/
+        key: ${{ runner.os }}-${{ hashFiles('**/migrations') }}
+
+    - name: Migrate & Test
+      run: | 
+        sleep 2;
+        diesel migration run;
+        sleep 2;
+        cargo test --verbose
+        
+
+    - name: Build
+      run: cargo build --verbose
