@@ -1,5 +1,5 @@
 use diesel::pg::PgConnection;
-use diesel::{CombineDsl, ExpressionMethods, QueryDsl, RunQueryDsl, SelectableHelper};
+use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl, SelectableHelper};
 use crate::domain::entities::Todo;
 use crate::domain::repositories::TodoRepository;
 use crate::infrastructure::diesel::models::{NewTodos, Todos};
