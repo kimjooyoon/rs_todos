@@ -46,8 +46,8 @@ jobs:
       with:
         path: |
           src/infrastructure/diesel/schema.rs
-          /home/runner/work/rs_todos/rs_todos/target/debug/deps/
-        key: ${{ runner.os }}-${{ hashFiles('**/migrations') }}
+          /home/runner/work/rs_todos/rs_todos/target/
+        key: ${{ runner.os }}-${{ hashFiles('**/migrations/**') }}
 
     - name: Migrate & Test
       run: | 
