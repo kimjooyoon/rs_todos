@@ -8,6 +8,7 @@ mig:
 	diesel migration run
 
 test:
+	sleep 2
 	make mig
-	sleep 3
+	sleep 2
 	cargo test --verbose

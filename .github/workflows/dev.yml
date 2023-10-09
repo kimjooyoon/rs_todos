@@ -20,12 +20,23 @@ jobs:
     - name: Install Diesel
       run: cargo install diesel_cli --no-default-features --features postgres
 
+    - name: set secret
+      run: |
+        echo "$DOTENV" > .env
+      env:
+        DOTENV: ${{secrets.DOTENV}}
+
     - uses: adambirds/docker-compose-action@v1.3.0
       with:
         compose-file: "./docs/postgres_local/docker-compose.yaml"
 
     - name: Migrate & Test
-      run: make test
+      run: | 
+        sleep 2;
+        diesel migration run;
+        sleep 2;
+        cargo test --verbose
+        
 
     - name: Build
       run: cargo build --verbose
