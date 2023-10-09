@@ -39,7 +39,9 @@ jobs:
     - name: Store migrate
       uses: actions/cache@v3
       with:
-        path: src/infrastructure/diesel/schema.rs
+        path: |
+          src/infrastructure/diesel/schema.rs
+          /home/runner/work/rs_todos/rs_todos/target/debug/deps/
         key: ${{ runner.os }}-${{ hashFiles('**/migrations') }}
 
     - name: Migrate & Test
