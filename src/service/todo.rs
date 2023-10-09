@@ -3,31 +3,31 @@ use crate::domain::repositories::TodoRepository;
 use crate::application::dtos::TodoDto;
 
 trait TodoService {
-    fn retrieve_todo_by_id(&self, id: i64) -> Result<Todo, String>;
-    fn retrieve_todo_all(&self) -> Vec<Todo>;
-    fn save(&self, todo: Todo);
+    fn retrieve_todo_by_id(&mut self, id: i64) -> Result<Todo, String>;
+    fn retrieve_todo_all(&mut self) -> Vec<TodoDto>;
+    fn save(&mut self, todo: Todo) -> i64;
 }
 
-pub struct TodoServiceAdapter {
-    repository: dyn TodoRepository,
+pub struct TodoServiceAdapter<'a> {
+    repository: Box<dyn TodoRepository + 'a>,
 }
 
-impl TodoServiceAdapter {
-    fn new(repository: Box<dyn TodoRepository>) -> Box<TodoServiceAdapter> {
-        Box::new(TodoServiceAdapter { repository: (repository) })
+impl<'a> TodoServiceAdapter<'a> {
+    fn new(repository: Box<dyn TodoRepository + 'a>) -> Box<TodoServiceAdapter> {
+        Box::new(TodoServiceAdapter { repository })
     }
 }
 
-impl TodoService for TodoServiceAdapter {
-    fn retrieve_todo_by_id(&self, id: i64) -> Result<Todo, String> {
+impl TodoService for TodoServiceAdapter<'_> {
+    fn retrieve_todo_by_id(&mut self, id: i64) -> Result<Todo, String> {
         self.repository.by_id(&id)
     }
 
-    fn save(&self, todo: Todo) {
-        self.repository.save(todo)
+    fn retrieve_todo_all(&mut self) -> Vec<TodoDto> {
+        self.repository.all().iter().map(TodoDto::from_entity).collect()
     }
 
-    fn retrieve_todo_all(&self) -> Vec<TodoDto> {
-        self.repository.all().iter().map(TodoDto::from_entity).collect()
+    fn save(&mut self, todo: Todo) -> i64 {
+        self.repository.save(todo, || {false})
     }
 }
