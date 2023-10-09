@@ -1,7 +1,7 @@
 use diesel::prelude::*;
 
 #[derive(Queryable, Selectable)]
-#[diesel(table_name = crate::schema::todos)]
+#[diesel(table_name = crate::infrastructure::diesel::schema::todos)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Todos {
     pub id: i64,
