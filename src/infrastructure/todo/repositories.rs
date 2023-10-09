@@ -14,6 +14,14 @@ impl<'a> TodoPostgresRepository<'a> {
             connection: Box::new(connection),
         }
     }
+    fn persistent_to_domain(persist: &Todos) -> Todo {
+        Todo {
+            id: persist.id.clone(),
+            title: persist.title.clone(),
+            content: persist.content.clone(),
+            order_number: persist.order_number.clone(),
+        }
+    }
 }
 
 use crate::infrastructure::diesel::schema::todos::dsl::*;
@@ -31,8 +39,6 @@ impl TodoRepository for TodoPostgresRepository<'_> {
     }
 
     fn save(&mut self, todo: Todo, fn_save: fn() -> bool) -> i64 {
-        use crate::infrastructure::diesel::schema::todos;
-
         let new_todo = NewTodos {
             title: todo.title,
             content: todo.content,
@@ -40,7 +46,7 @@ impl TodoRepository for TodoPostgresRepository<'_> {
             is_deleted: fn_save(),
         };
 
-        let result = diesel::insert_into(todos::table)
+        let result = diesel::insert_into(todos)
             .values(&new_todo)
             .returning(Todos::as_returning())
             .get_result(*self.connection);
@@ -48,10 +54,15 @@ impl TodoRepository for TodoPostgresRepository<'_> {
         result.expect("Error saving new todos").id
     }
 
-    fn all(&self) -> Vec<Todo> {
-        vec![]
+    fn all(&mut self) -> Vec<Todo> {
+        let result = todos.
+            select(Todos::as_select())
+            .load(*self.connection).expect("Error loading all todos");
+
+        result.iter().map(Self::persistent_to_domain).collect()
     }
 }
+
 
 #[cfg(test)]
 mod test {
@@ -92,8 +103,18 @@ mod test {
             let result = TodoPostgresRepository::save(&mut repository, todo, || { false });
 
             assert_ne!(1i64, result);
-            print!("{}",result);
+            print!("{}", result);
             Err(Error::NotFound)
         });
+    }
+
+    #[test]
+    fn all() {
+        let connection: &mut PgConnection = &mut establish_connection();
+        let mut repository = TodoPostgresRepository::new(connection);
+
+        let result = TodoPostgresRepository::all(&mut repository);
+
+        assert_eq!(1, result.len())
     }
 }
