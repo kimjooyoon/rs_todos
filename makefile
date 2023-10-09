@@ -6,3 +6,8 @@ sql:
 
 mig:
 	diesel migration run
+
+test:
+	make mig
+	sleep 3
+	cargo test --verbose
