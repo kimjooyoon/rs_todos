@@ -22,7 +22,10 @@ jobs:
       uses: actions/cache@v3
       with:
         path: /home/runner/.cargo/bin/diesel
-        key: ${{ runner.os }}-${{ hashFiles('**/diesel.toml') }}
+        key: | 
+          ${{ runner.os }}-${{ hashFiles('**/diesel.toml') }}
+          ${{ runner.os }}-${{ hashFiles('/home/runner/.cargo/bin/diesel') }}
+          
 
     - name: Install Diesel
       if: steps.diesel-cache.outputs.cache-hit == 'false'
