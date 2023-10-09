@@ -28,7 +28,7 @@ jobs:
           
 
     - name: Install Diesel
-      if: steps.diesel-cache.outputs.cache-hit == 'false'
+      if: steps.diesel-cache.outputs.cache-hit != 'true'
       run: cargo install diesel_cli@2.1.1 --no-default-features --features postgres
 
     - name: set secret
