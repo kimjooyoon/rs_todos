@@ -22,7 +22,7 @@ mod test {
     use crate::domain::entities::Todo;
 
     #[test]
-    fn create_todo() {
+    fn new_todo() {
         let id: i64 = 100;
         let title: String = String::from("todo1 example");
         let content: String = String::from("todo1 content");

@@ -9,3 +9,12 @@ pub struct Todos {
     pub content: String,
     pub order_number: i32,
 }
+
+#[derive(Insertable)]
+#[diesel(table_name = crate::infrastructure::diesel::schema::todos)]
+pub struct NewTodos {
+    pub title: String,
+    pub content: String,
+    pub order_number: i32,
+    pub is_deleted: bool,
+}
