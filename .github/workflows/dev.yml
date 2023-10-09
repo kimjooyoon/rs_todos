@@ -17,8 +17,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Store diesel
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/.cargo/bin/diesel
+
     - name: Install Diesel
-      run: cargo install diesel_cli --no-default-features --features postgres
+      run: cargo install diesel_cli@2.1.1 --no-default-features --features postgres
 
     - name: set secret
       run: |
@@ -29,6 +34,12 @@ jobs:
     - uses: adambirds/docker-compose-action@v1.3.0
       with:
         compose-file: "./docs/postgres_local/docker-compose.yaml"
+
+    - name: Store migrate
+      uses: actions/cache@v3
+      with:
+        path: src/infrastructure/diesel/schema.rs
+        key: ${{ runner.os }}-${{ hashFiles('**/migrations') }}
 
     - name: Migrate & Test
       run: | 
