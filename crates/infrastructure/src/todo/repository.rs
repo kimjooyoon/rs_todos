@@ -71,7 +71,7 @@ mod test {
     use domain::todo::entity::Todo;
     use application::out::repository::todo::TodoRepository;
     use crate::diesel::establish_connection;
-    use crate::todo::repositories::TodoPostgresRepository;
+    use crate::todo::repository::TodoPostgresRepository;
 
     #[test]
     fn by_id() {
