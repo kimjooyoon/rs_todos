@@ -19,7 +19,7 @@ impl Todo {
 
 #[cfg(test)]
 mod test {
-    use crate::domain::entities::Todo;
+    use crate::todo::entity::Todo;
 
     #[test]
     fn new_todo() {

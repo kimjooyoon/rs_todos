@@ -1,8 +1,8 @@
 use diesel::pg::PgConnection;
 use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl, SelectableHelper};
-use crate::domain::entities::Todo;
-use crate::domain::repositories::TodoRepository;
-use crate::infrastructure::diesel::models::{NewTodos, Todos};
+use domain::todo::entity::Todo;
+use application::out::repository::todo::TodoRepository;
+use crate::diesel::models::{NewTodos, Todos};
 
 pub struct TodoPostgresRepository<'a> {
     connection: Box<&'a mut PgConnection>,
@@ -24,7 +24,7 @@ impl<'a> TodoPostgresRepository<'a> {
     }
 }
 
-use crate::infrastructure::diesel::schema::todos::dsl::*;
+use crate::diesel::schema::todos::dsl::*;
 
 impl TodoRepository for TodoPostgresRepository<'_> {
     fn by_id(&mut self, id_i64: &i64) -> Result<Todo, String> {
@@ -68,10 +68,10 @@ impl TodoRepository for TodoPostgresRepository<'_> {
 mod test {
     use diesel::{Connection, PgConnection};
     use diesel::result::Error;
-    use crate::domain::entities::Todo;
-    use crate::domain::repositories::TodoRepository;
-    use crate::infrastructure::diesel::establish_connection;
-    use crate::infrastructure::todo::repositories::TodoPostgresRepository;
+    use domain::todo::entity::Todo;
+    use application::out::repository::todo::TodoRepository;
+    use crate::diesel::establish_connection;
+    use crate::todo::repositories::TodoPostgresRepository;
 
     #[test]
     fn by_id() {

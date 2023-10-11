@@ -1,6 +1,6 @@
-use crate::domain::entities::Todo;
-use crate::domain::repositories::TodoRepository;
-use crate::application::dtos::TodoDto;
+use todos_rs::todo::entity::Todo;
+use application::out::repository::todo::TodoRepository;
+use application::r#in::rest::dto::TodoDto;
 
 trait TodoService {
     fn retrieve_todo_by_id(&mut self, id: i64) -> Result<Todo, String>;
@@ -35,9 +35,9 @@ impl TodoService for TodoServiceAdapter<'_> {
 #[cfg(test)]
 mod test {
     use mockall::predicate::eq;
-    use crate::domain::entities::Todo;
-    use crate::domain::repositories::{MockTodoRepository, TodoRepository};
-    use crate::service::todo::{TodoService, TodoServiceAdapter};
+    use todos_rs::todo::entity::Todo;
+    use application::out::repository::todo::{MockTodoRepository, TodoRepository};
+    use crate::todo::use_case::{TodoService, TodoServiceAdapter};
 
     #[test]
     fn retrieve_todo_by_id<'a>() {

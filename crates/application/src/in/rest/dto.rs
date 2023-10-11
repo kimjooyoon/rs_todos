@@ -1,4 +1,4 @@
-use crate::domain::entities::Todo;
+use domain::todo::entity::Todo;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct TodoDto {
@@ -21,8 +21,8 @@ impl TodoDto {
 
 #[cfg(test)]
 mod test {
-    use crate::application::dtos::TodoDto;
-    use crate::domain::entities::Todo;
+    use domain::todo::entity::Todo;
+    use crate::r#in::rest::dto::TodoDto;
 
     #[test]
     fn create_todo_dto_from_entity() {
