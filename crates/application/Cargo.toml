@@ -1,0 +1,10 @@
+[package]
+name = "application"
+version = "0.1.0"
+edition = "2021"
+authors = ["kimjooyoon <asketeddy@gmail.com>"]
+
+[dependencies]
+mockall = { workspace = true }
+
+domain = { path = "../domain" }

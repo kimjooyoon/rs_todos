@@ -1,0 +1,11 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+authors = ["kimjooyoon <asketeddy@gmail.com>"]
+
+[dependencies]
+axum = "0.6.20"
+
+async-graphql = { workspace = true }
+serde = { workspace = true, features = ["derive"] }

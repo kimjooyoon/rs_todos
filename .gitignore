@@ -15,4 +15,4 @@ Cargo.lock
 
 .env
 
-src/infrastructure/diesel/schema.rs
+crates/infrastructure/src/diesel/schema.rs

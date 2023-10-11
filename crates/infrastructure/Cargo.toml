@@ -1,0 +1,17 @@
+[package]
+name = "infrastructure"
+version = "0.1.0"
+edition = "2021"
+authors = ["kimjooyoon <asketeddy@gmail.com>"]
+
+[lib]
+name = "todos_rs"
+path = "src/lib.rs"
+
+[dependencies]
+diesel = { workspace = true }
+mockall = { workspace = true }
+
+
+domain = { path = "../domain" }
+application = { path = "../application" }
